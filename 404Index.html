@@ -1,0 +1,1787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ACCT 404 | MGSC 291 Foundation for AIS | Dyan Barry</title>
+<style>
+  :root {
+    --teal-dark: #1e3d45;
+    --teal-mid: #2d5560;
+    --teal-light: #3a6b78;
+    --teal-bright: #4a8a9a;
+    --gold: #c9a84c;
+    --gold-light: #e8c96a;
+    --spark: #e8832a;
+    --spark-light: #f5a623;
+    --sand: #b5a882;
+    --sand-light: #d4c9a8;
+    --white: #ffffff;
+    --off-white: #f0f4f5;
+    --text-light: rgba(255,255,255,0.88);
+    --text-muted: rgba(255,255,255,0.55);
+    --card-bg: rgba(255,255,255,0.06);
+    --card-border: rgba(201,168,76,0.25);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--teal-dark);
+    color: var(--white);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── NETWORK BACKGROUND ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(74,138,154,0.12) 0%, transparent 50%),
+      radial-gradient(circle at 85% 80%, rgba(201,168,76,0.08) 0%, transparent 50%),
+      radial-gradient(circle at 50% 50%, rgba(232,131,42,0.04) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* SVG network dots overlay */
+  .network-bg {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.18;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: relative;
+    z-index: 10;
+    background: linear-gradient(135deg, #0f2228 0%, var(--teal-dark) 40%, var(--teal-mid) 100%);
+    border-bottom: 2px solid var(--gold);
+    padding: 2rem 2rem 1.5rem;
+    overflow: hidden;
+  }
+  header::after {
+    content: '✦';
+    position: absolute;
+    bottom: -30px;
+    right: 80px;
+    font-size: 8rem;
+    color: var(--spark);
+    opacity: 0.12;
+    line-height: 1;
+  }
+
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: flex-start;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  /* DB EMBLEM */
+  .db-emblem {
+    flex-shrink: 0;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--teal-mid), var(--teal-dark));
+    border: 2.5px solid var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: 0 0 20px rgba(201,168,76,0.3);
+  }
+  .db-emblem::before {
+    content: '✦';
+    position: absolute;
+    top: -6px;
+    right: -4px;
+    font-size: 0.9rem;
+    color: var(--gold);
+  }
+  .db-emblem .db-text {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--gold);
+    letter-spacing: -0.05em;
+    font-style: italic;
+  }
+
+  .header-content { flex: 1; min-width: 280px; }
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(201,168,76,0.15);
+    border: 1px solid rgba(201,168,76,0.4);
+    border-radius: 20px;
+    padding: 0.25rem 0.9rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 0.75rem;
+  }
+  header h1 {
+    font-size: clamp(1.4rem, 3.5vw, 2.2rem);
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 0.4rem;
+  }
+  header h1 span { color: var(--gold); }
+  header p {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    max-width: 680px;
+    margin-bottom: 1rem;
+  }
+  .header-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+  .header-meta span {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: rgba(255,255,255,0.05);
+    padding: 0.2rem 0.7rem;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  /* BRAND WATERMARK (small, per page) */
+  .brand-mark {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    opacity: 0.7;
+  }
+  .brand-mark .bm-emblem {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--teal-mid), var(--teal-dark));
+    border: 1.5px solid var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
+    font-weight: 800;
+    color: var(--gold);
+    font-style: italic;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .brand-mark .bm-emblem::before {
+    content: '✦';
+    position: absolute;
+    top: -4px;
+    right: -3px;
+    font-size: 0.4rem;
+    color: var(--gold);
+  }
+  .brand-mark .bm-text {
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 700;
+  }
+  .brand-mark .bm-name {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: linear-gradient(90deg, #0f2228, var(--teal-dark));
+    border-bottom: 1px solid rgba(201,168,76,0.3);
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  }
+  nav::-webkit-scrollbar { display: none; }
+  nav button {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    padding: 0.9rem 1.1rem;
+    cursor: pointer;
+    font-size: 0.78rem;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: all 0.2s;
+    border-bottom: 3px solid transparent;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  nav button:hover { color: var(--white); background: rgba(255,255,255,0.04); }
+  nav button.active {
+    color: var(--gold);
+    border-bottom-color: var(--gold);
+    background: rgba(201,168,76,0.06);
+  }
+
+  /* ── MAIN ── */
+  main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .section { display: none; }
+  .section.active { display: block; animation: fadeUp 0.35s ease both; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(201,168,76,0.2);
+  }
+  .card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    background: rgba(201,168,76,0.15);
+    border: 1px solid rgba(201,168,76,0.3);
+  }
+  .card h2 { font-size: 1.05rem; font-weight: 700; color: var(--gold-light); }
+  .card h3 { font-size: 0.95rem; font-weight: 700; color: var(--gold-light); margin-bottom: 0.5rem; }
+
+  /* ── GRIDS ── */
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 1.2rem; }
+  .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem; }
+  .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1rem; }
+
+  /* ── STAT BOXES ── */
+  .stat-box {
+    background: linear-gradient(135deg, rgba(45,85,96,0.8), rgba(30,61,69,0.9));
+    border: 1px solid rgba(201,168,76,0.35);
+    border-radius: 12px;
+    padding: 1.4rem;
+    text-align: center;
+  }
+  .stat-box .number {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+  .stat-box .label { font-size: 0.78rem; color: var(--text-muted); line-height: 1.4; }
+
+  /* ── THESIS BOX ── */
+  .thesis-box {
+    background: linear-gradient(135deg, rgba(15,34,40,0.95), rgba(45,85,96,0.8));
+    border: 2px solid var(--gold);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .thesis-box::before {
+    content: '"';
+    position: absolute;
+    top: -30px;
+    left: 15px;
+    font-size: 12rem;
+    opacity: 0.06;
+    font-family: Georgia, serif;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .thesis-box::after {
+    content: '✦';
+    position: absolute;
+    bottom: 10px;
+    right: 20px;
+    font-size: 3rem;
+    color: var(--spark);
+    opacity: 0.2;
+  }
+  .thesis-box p {
+    font-size: clamp(0.95rem, 2vw, 1.15rem);
+    font-style: italic;
+    line-height: 1.8;
+    color: var(--text-light);
+    position: relative;
+    z-index: 1;
+    max-width: 850px;
+    margin: 0 auto;
+  }
+  .thesis-box p em { color: var(--gold-light); font-style: normal; font-weight: 700; }
+  .thesis-box .attribution {
+    margin-top: 1rem;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-style: normal;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── SECTION TITLE ── */
+  .section-title {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--gold-light);
+    margin-bottom: 0.25rem;
+  }
+  .section-subtitle {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-bottom: 1.5rem;
+  }
+
+  /* ── HIGHLIGHT ── */
+  .highlight {
+    background: rgba(232,131,42,0.12);
+    border: 1px solid rgba(232,131,42,0.4);
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+    margin: 1rem 0;
+    font-size: 0.88rem;
+    color: var(--spark-light);
+    font-weight: 600;
+  }
+
+  /* ── PARADIGM TABLE ── */
+  .paradigm-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  .paradigm-table th {
+    padding: 0.7rem 1rem;
+    text-align: left;
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+  }
+  .paradigm-table th:first-child { background: rgba(239,68,68,0.15); color: #fca5a5; border-radius: 8px 0 0 0; }
+  .paradigm-table th.arrow-col { background: transparent; width: 40px; }
+  .paradigm-table th:last-child { background: rgba(16,185,129,0.15); color: #6ee7b7; border-radius: 0 8px 0 0; }
+  .paradigm-table td { padding: 0.65rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.05); vertical-align: top; font-size: 0.83rem; }
+  .paradigm-table tr:last-child td { border-bottom: none; }
+  .paradigm-table td:first-child { color: #fca5a5; background: rgba(239,68,68,0.06); }
+  .paradigm-table td.arrow-col { text-align: center; color: var(--gold); font-weight: 800; font-size: 1rem; background: transparent; }
+  .paradigm-table td:last-child { color: #6ee7b7; background: rgba(16,185,129,0.06); font-weight: 600; }
+
+  /* ── TOPIC CARDS ── */
+  .topic-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .topic-card:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+  .topic-card-header {
+    padding: 0.9rem 1.1rem;
+    font-weight: 700;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-bottom: 1px solid rgba(201,168,76,0.2);
+  }
+  .topic-card-body { padding: 1.1rem; }
+  .label-sm { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.3rem; opacity: 0.55; }
+  .without {
+    background: rgba(239,68,68,0.1);
+    border-left: 3px solid rgba(239,68,68,0.6);
+    padding: 0.6rem 0.8rem;
+    border-radius: 0 6px 6px 0;
+    font-size: 0.8rem;
+    color: #fca5a5;
+    margin-bottom: 0.75rem;
+  }
+  .with {
+    background: rgba(16,185,129,0.1);
+    border-left: 3px solid rgba(16,185,129,0.6);
+    padding: 0.6rem 0.8rem;
+    border-radius: 0 6px 6px 0;
+    font-size: 0.8rem;
+    color: #6ee7b7;
+    margin-bottom: 0.75rem;
+  }
+  .stat-concept {
+    background: rgba(74,138,154,0.2);
+    border-radius: 6px;
+    padding: 0.5rem 0.8rem;
+    font-size: 0.75rem;
+    color: var(--sand-light);
+    font-weight: 600;
+  }
+
+  /* ── EXPANDABLE RESEARCH BUTTONS ── */
+  .research-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(201,168,76,0.12);
+    border: 1px solid rgba(201,168,76,0.4);
+    border-radius: 20px;
+    padding: 0.3rem 0.9rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--gold-light);
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-top: 0.6rem;
+  }
+  .research-btn:hover { background: rgba(201,168,76,0.22); border-color: var(--gold); color: var(--gold); }
+  .research-btn .arrow { transition: transform 0.2s; display: inline-block; }
+  .research-btn.open .arrow { transform: rotate(180deg); }
+
+  .research-panel {
+    display: none;
+    margin-top: 0.75rem;
+    background: rgba(15,34,40,0.6);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 10px;
+    padding: 1rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+  .research-panel.open { display: block; animation: fadeUp 0.25s ease; }
+  .research-panel .cite-title { color: var(--gold-light); font-weight: 700; margin-bottom: 0.3rem; font-size: 0.78rem; }
+  .research-panel .cite-body { margin-bottom: 0.6rem; }
+  .research-panel a { color: var(--teal-bright); text-decoration: underline; font-size: 0.75rem; }
+  .research-panel .cite-tag {
+    display: inline-block;
+    background: rgba(74,138,154,0.25);
+    color: var(--sand-light);
+    border-radius: 20px;
+    padding: 0.1rem 0.5rem;
+    font-size: 0.65rem;
+    font-weight: 700;
+    margin: 0.15rem 0.1rem;
+  }
+
+  /* ── PIPELINE ── */
+  .pipeline {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    overflow-x: auto;
+    padding: 0.5rem 0 1rem;
+  }
+  .pipeline-step {
+    flex: 1;
+    min-width: 130px;
+    text-align: center;
+    padding: 1.2rem 0.8rem;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(201,168,76,0.2);
+  }
+  .pipeline-arrow {
+    display: flex;
+    align-items: center;
+    font-size: 1.4rem;
+    color: var(--gold);
+    padding: 0 0.4rem;
+    flex-shrink: 0;
+    font-weight: 800;
+  }
+  .pipeline-step .step-icon { font-size: 1.8rem; margin-bottom: 0.5rem; }
+  .pipeline-step .step-title { font-weight: 700; font-size: 0.82rem; color: var(--gold-light); margin-bottom: 0.3rem; }
+  .pipeline-step .step-desc { font-size: 0.72rem; color: var(--text-muted); }
+
+  /* ── BRIDGE ROWS ── */
+  .bridge-row {
+    display: grid;
+    grid-template-columns: 1fr 36px 1fr;
+    gap: 0.5rem;
+    align-items: center;
+    margin-bottom: 0.6rem;
+  }
+  .bridge-left {
+    background: linear-gradient(135deg, rgba(30,61,69,0.9), rgba(45,85,96,0.8));
+    border: 1px solid rgba(74,138,154,0.4);
+    color: var(--sand-light);
+    border-radius: 8px;
+    padding: 0.6rem 0.9rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+  .bridge-right {
+    background: linear-gradient(135deg, rgba(6,95,70,0.4), rgba(16,185,129,0.2));
+    border: 1px solid rgba(16,185,129,0.35);
+    color: #6ee7b7;
+    border-radius: 8px;
+    padding: 0.6rem 0.9rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+  .bridge-arrow { text-align: center; font-size: 1rem; color: var(--gold); font-weight: 800; }
+
+  /* ── TAGS ── */
+  .tag {
+    display: inline-block;
+    border-radius: 20px;
+    padding: 0.15rem 0.6rem;
+    font-size: 0.68rem;
+    font-weight: 700;
+    margin: 0.15rem;
+  }
+  .tag-teal { background: rgba(74,138,154,0.25); color: var(--sand-light); }
+  .tag-gold { background: rgba(201,168,76,0.2); color: var(--gold-light); }
+  .tag-spark { background: rgba(232,131,42,0.2); color: var(--spark-light); }
+  .tag-green { background: rgba(16,185,129,0.15); color: #6ee7b7; }
+
+  /* ── REC BOX ── */
+  .rec-box {
+    background: linear-gradient(135deg, rgba(15,34,40,0.95), rgba(45,85,96,0.7));
+    border: 2px solid var(--gold);
+    border-radius: 14px;
+    padding: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+  .rec-box h3 { color: var(--gold); margin-bottom: 1rem; font-size: 1rem; }
+  .rec-box ul { list-style: none; }
+  .rec-box ul li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    font-size: 0.87rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    color: var(--text-light);
+  }
+  .rec-box ul li:last-child { border-bottom: none; }
+  .rec-box ul li::before { content: '✦'; color: var(--gold); font-size: 0.6rem; flex-shrink: 0; margin-top: 0.3rem; }
+
+  /* ── OBJECTION BOXES ── */
+  .objection {
+    background: rgba(239,68,68,0.07);
+    border: 1px solid rgba(239,68,68,0.25);
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 0.75rem;
+  }
+  .objection .obj-q { color: #fca5a5; font-weight: 700; font-size: 0.85rem; margin-bottom: 0.4rem; }
+  .objection .obj-a { color: #6ee7b7; font-size: 0.83rem; }
+
+  /* ── PROGRESS BARS ── */
+  .progress-item { margin-bottom: 0.9rem; }
+  .progress-label { display: flex; justify-content: space-between; font-size: 0.78rem; font-weight: 600; margin-bottom: 0.25rem; color: var(--text-light); }
+  .progress-bar { height: 8px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 10px; background: linear-gradient(90deg, var(--teal-bright), var(--gold)); }
+
+  /* ── CITATION CARDS ── */
+  .citation {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 0.75rem;
+  }
+  .citation .cite-source { font-weight: 700; color: var(--gold-light); font-size: 0.78rem; margin-bottom: 0.3rem; }
+  .citation .cite-finding { color: var(--text-muted); line-height: 1.55; font-size: 0.83rem; }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative;
+    z-index: 1;
+    background: linear-gradient(90deg, #0f2228, var(--teal-dark));
+    border-top: 1px solid rgba(201,168,76,0.3);
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 3rem;
+  }
+  footer .footer-brand { display: flex; align-items: center; gap: 0.6rem; }
+  footer .footer-emblem {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--teal-mid), var(--teal-dark));
+    border: 1.5px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.65rem; font-weight: 800; color: var(--gold); font-style: italic;
+    position: relative;
+  }
+  footer .footer-emblem::before { content: '✦'; position: absolute; top: -4px; right: -3px; font-size: 0.4rem; color: var(--gold); }
+  footer .footer-text { font-size: 0.72rem; color: var(--text-muted); }
+  footer .footer-text strong { color: var(--gold-light); }
+  footer .footer-right { font-size: 0.72rem; color: var(--text-muted); text-align: right; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .bridge-row { grid-template-columns: 1fr; }
+    .bridge-arrow { transform: rotate(90deg); }
+    .pipeline { flex-direction: column; }
+    .pipeline-arrow { transform: rotate(90deg); align-self: center; }
+    header { padding: 1.5rem 1rem; }
+    main { padding: 1.5rem 1rem; }
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), var(--spark), var(--gold), transparent);
+    border-radius: 2px;
+    margin: 1.5rem 0;
+    opacity: 0.5;
+  }
+
+  /* ── SPARK ACCENT ── */
+  .spark-accent {
+    display: inline-block;
+    color: var(--spark);
+    font-size: 1.1em;
+  }
+</style>
+</head>
+<body>
+
+<!-- SVG Network Background -->
+<svg class="network-bg" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="dot" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#c9a84c" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#c9a84c" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <!-- Dots -->
+  <circle cx="8%" cy="15%" r="3" fill="#c9a84c" opacity="0.5"/>
+  <circle cx="22%" cy="8%" r="2" fill="#4a8a9a" opacity="0.6"/>
+  <circle cx="40%" cy="20%" r="3" fill="#c9a84c" opacity="0.4"/>
+  <circle cx="60%" cy="10%" r="2" fill="#4a8a9a" opacity="0.5"/>
+  <circle cx="78%" cy="18%" r="3" fill="#c9a84c" opacity="0.4"/>
+  <circle cx="92%" cy="8%" r="2" fill="#4a8a9a" opacity="0.5"/>
+  <circle cx="15%" cy="40%" r="2" fill="#4a8a9a" opacity="0.4"/>
+  <circle cx="35%" cy="55%" r="3" fill="#c9a84c" opacity="0.3"/>
+  <circle cx="55%" cy="45%" r="2" fill="#4a8a9a" opacity="0.4"/>
+  <circle cx="75%" cy="60%" r="3" fill="#c9a84c" opacity="0.3"/>
+  <circle cx="90%" cy="40%" r="2" fill="#4a8a9a" opacity="0.4"/>
+  <circle cx="5%" cy="70%" r="3" fill="#c9a84c" opacity="0.3"/>
+  <circle cx="25%" cy="80%" r="2" fill="#4a8a9a" opacity="0.4"/>
+  <circle cx="50%" cy="75%" r="3" fill="#c9a84c" opacity="0.3"/>
+  <circle cx="70%" cy="85%" r="2" fill="#4a8a9a" opacity="0.4"/>
+  <circle cx="88%" cy="72%" r="3" fill="#c9a84c" opacity="0.3"/>
+  <!-- Lines -->
+  <line x1="8%" y1="15%" x2="22%" y2="8%" stroke="#c9a84c" stroke-width="0.5" opacity="0.3"/>
+  <line x1="22%" y1="8%" x2="40%" y2="20%" stroke="#4a8a9a" stroke-width="0.5" opacity="0.3"/>
+  <line x1="40%" y1="20%" x2="60%" y2="10%" stroke="#c9a84c" stroke-width="0.5" opacity="0.3"/>
+  <line x1="60%" y1="10%" x2="78%" y2="18%" stroke="#4a8a9a" stroke-width="0.5" opacity="0.3"/>
+  <line x1="78%" y1="18%" x2="92%" y2="8%" stroke="#c9a84c" stroke-width="0.5" opacity="0.3"/>
+  <line x1="8%" y1="15%" x2="15%" y2="40%" stroke="#4a8a9a" stroke-width="0.5" opacity="0.25"/>
+  <line x1="40%" y1="20%" x2="35%" y2="55%" stroke="#c9a84c" stroke-width="0.5" opacity="0.25"/>
+  <line x1="60%" y1="10%" x2="55%" y2="45%" stroke="#4a8a9a" stroke-width="0.5" opacity="0.25"/>
+  <line x1="78%" y1="18%" x2="75%" y2="60%" stroke="#c9a84c" stroke-width="0.5" opacity="0.25"/>
+  <line x1="35%" y1="55%" x2="55%" y2="45%" stroke="#c9a84c" stroke-width="0.5" opacity="0.2"/>
+  <line x1="55%" y1="45%" x2="75%" y2="60%" stroke="#4a8a9a" stroke-width="0.5" opacity="0.2"/>
+  <line x1="25%" y1="80%" x2="50%" y2="75%" stroke="#c9a84c" stroke-width="0.5" opacity="0.2"/>
+  <line x1="50%" y1="75%" x2="70%" y2="85%" stroke="#4a8a9a" stroke-width="0.5" opacity="0.2"/>
+</svg>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="db-emblem"><span class="db-text">DB</span></div>
+    <div class="header-content">
+      <div class="header-badge">✦ Curriculum Proposal · Darla Moore School of Business</div>
+      <h1><span>MGSC 291:</span> Let's Talk About It<br><span>Business Statistics</span> as a Foundation for <span>ACCT 404</span></h1>
+      <p>A collaborative, research-backed look at how setting a shared foundation in business statistics can enhance Accounting Information Systems by opening space for deeper analysis, stronger judgment, and more confident evaluation of AI-enabled outputs.</p>
+      <div class="header-meta">
+        <span>🎓 ACCT 404 — Accounting Information Systems</span>
+        <span>📐 MGSC 291 — Business Statistics</span>
+        <span>🏛️ University of South Carolina</span>
+        <span>✦ Dyan Barry · CATALYST</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav>
+  <button class="active" onclick="showSection('overview', this)">🏠 Overview</button>
+  <button onclick="showSection('paradigm', this)">🔄 Paradigm Shift</button>
+  <button onclick="showSection('mapping', this)">🗺️ Topic Mapping</button>
+  <button onclick="showSection('examples', this)">🧪 Assignment Elevation</button>
+  <button onclick="showSection('ai', this)">🤖 Stats → AI → Audit</button>
+  <button onclick="showSection('research', this)">📚 Research</button>
+  <button onclick="showSection('bridge', this)">🔗 Skill Bridge</button>
+  <button onclick="showSection('recommendation', this)">✦ Recommendation</button>
+</nav>
+
+<main>
+
+<!-- ════════════════════════════════════════
+     OVERVIEW
+════════════════════════════════════════ -->
+<div id="overview" class="section active">
+
+  <div class="brand-mark">
+    <div class="bm-emblem">DB</div>
+    <div>
+      <div class="bm-name">Dyan Barry</div>
+      <div class="bm-text">CATALYST ✦</div>
+    </div>
+  </div>
+
+  <div class="thesis-box">
+    <p>"ACCT 404 already introduces students to the systems, controls, analytics, and emerging technologies shaping modern accounting. Because students enter with varied quantitative backgrounds, some analytical ideas have to be introduced at an accessible level. Sequencing MGSC 291 first creates a shared foundation, allowing students to move from using AIS tools toward evaluating the logic, risk, and confidence behind those tools."</p>
+    <div class="attribution">— Foundation Proposal · ACCT 404 · Darla Moore School of Business · 2026</div>
+  </div>
+
+  <div class="grid-4" style="margin-bottom:1.5rem;">
+    <div class="stat-box">
+      <div class="number">8+</div>
+      <div class="label">ACCT 404 topics directly enhanced by statistical literacy</div>
+    </div>
+    <div class="stat-box">
+      <div class="number">AI</div>
+      <div class="label">Fraud detection, prediction, and audit analytics rely on statistical foundations</div>
+    </div>
+    <div class="stat-box">
+      <div class="number">35%</div>
+      <div class="label">Projected growth in data science jobs by 2032 (U.S. BLS)</div>
+    </div>
+    <div class="stat-box">
+      <div class="number">STEM</div>
+      <div class="label">Accounting's emerging identity — requiring statistical literacy</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">💡</div>
+      <h2>The Core Argument</h2>
+    </div>
+    <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:1rem;">MGSC 291 is already part of the business degree. This proposal does not add burden — it <strong style="color:var(--gold-light);">sequences existing coursework</strong> so ACCT 404 can build from a common quantitative starting point. Students can still learn AIS tools without this foundation, but a prior statistics course allows more time for interpretation, judgment, model evaluation, and audit-level questioning.</p>
+    <div class="grid-3">
+      <div style="background:rgba(16,185,129,0.08);border-radius:10px;padding:1rem;border-left:3px solid rgba(16,185,129,0.5);">
+        <div style="font-weight:700;color:#6ee7b7;margin-bottom:0.4rem;">📐 Foundation</div>
+        <div style="font-size:0.82rem;color:var(--text-muted);">Statistics provides the conceptual vocabulary for many of the analytics-heavy concepts in ACCT 404 — from Z-scores to fraud detection to AI verification.</div>
+      </div>
+      <div style="background:rgba(74,138,154,0.12);border-radius:10px;padding:1rem;border-left:3px solid rgba(74,138,154,0.5);">
+        <div style="font-weight:700;color:var(--sand-light);margin-bottom:0.4rem;">🔍 Depth</div>
+        <div style="font-size:0.82rem;color:var(--text-muted);">With stats sequenced first, ACCT 404 can more often move beyond tool operation into threshold design, model validation, and process auditing.</div>
+      </div>
+      <div style="background:rgba(232,131,42,0.08);border-radius:10px;padding:1rem;border-left:3px solid rgba(232,131,42,0.5);">
+        <div style="font-weight:700;color:var(--spark-light);margin-bottom:0.4rem;">🚀 Future-Ready</div>
+        <div style="font-size:0.82rem;color:var(--text-muted);">The accounting profession is rapidly evolving toward AI governance and data analytics — statistical literacy is the clearest entry point for evaluating those systems responsibly.</div>
+      </div>
+    </div>
+    <div class="highlight" style="background:rgba(74,138,154,0.12);border-color:rgba(74,138,154,0.35);color:var(--sand-light);">
+      ✦ <strong>Respectful framing:</strong> This proposal builds on the analytical work already present in ACCT 404. The goal is not to suggest a flaw in the course or turn AIS into statistics. It recognizes a normal curriculum design constraint: when students do not share a quantitative baseline, some concepts must be introduced more cautiously. MGSC 291 opens the door for deeper AIS application.
+    </div>
+
+    <button class="research-btn" onclick="toggleResearch(this)">📖 Supporting Research <span class="arrow">▼</span></button>
+    <div class="research-panel">
+      <div class="cite-title">ScienceDirect — Accounting as a STEM Discipline (Systematic Review 2015–2024)</div>
+      <div class="cite-body">"A solid understanding of mathematical and statistical concepts is considered crucial for interpreting and analyzing accounting information... enabling accounting professionals to meet the challenges of the digital age."</div>
+      <a href="https://www.sciencedirect.com/science/article/abs/pii/S0748575125000211" target="_blank">🔗 View Source</a>
+      <span class="cite-tag">STEM Accounting</span><span class="cite-tag">Curriculum Design</span>
+    </div>
+  </div>
+
+  <div class="card" style="border-color:rgba(74,138,154,0.35);background:rgba(74,138,154,0.08);">
+    <div class="card-header">
+      <div class="card-icon">🚪</div>
+      <h2>Design Constraint, Not Deficiency</h2>
+    </div>
+    <p style="font-size:0.88rem;color:var(--text-muted);line-height:1.7;">ACCT 404 is designed to serve students with different levels of quantitative preparation. That is a reasonable course-design choice, not a weakness. The opportunity is that MGSC 291 gives students a shared statistical foundation first, which opens space inside ACCT 404 for deeper work with thresholds, model risk, data visualization, fraud analytics, and AI-output review.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🚪</div>
+      <h2>What a Shared Statistics Foundation Unlocks</h2>
+    </div>
+    <div class="grid-2">
+      <div>
+        <div class="label-sm">Current Constraint — Varied Baselines</div>
+        <ul style="list-style:none;font-size:0.83rem;">
+          <li style="padding:0.35rem 0;border-bottom:1px solid rgba(255,255,255,0.05);color:#fca5a5;">❌ Treat the Altman Z-Score as a formula to memorize</li>
+          <li style="padding:0.35rem 0;border-bottom:1px solid rgba(255,255,255,0.05);color:#fca5a5;">❌ Pick chart types based on aesthetics, not data type</li>
+          <li style="padding:0.35rem 0;border-bottom:1px solid rgba(255,255,255,0.05);color:#fca5a5;">❌ Set continuous audit alarm thresholds arbitrarily</li>
+          <li style="padding:0.35rem 0;border-bottom:1px solid rgba(255,255,255,0.05);color:#fca5a5;">❌ Accept AI outputs without understanding confidence</li>
+          <li style="padding:0.35rem 0;color:#fca5a5;">❌ Use GAS tools without understanding sampling logic</li>
+        </ul>
+      </div>
+      <div>
+        <div class="label-sm">With MGSC 291 First — Deeper Application</div>
+        <ul style="list-style:none;font-size:0.83rem;">
+          <li style="padding:0.35rem 0;border-bottom:1px solid rgba(255,255,255,0.05);color:#6ee7b7;">✦ Understand Z-Score weights, misclassification risk, and prediction confidence</li>
+          <li style="padding:0.35rem 0;border-bottom:1px solid rgba(255,255,255,0.05);color:#6ee7b7;">✦ Select visualizations based on distribution and data type</li>
+          <li style="padding:0.35rem 0;border-bottom:1px solid rgba(255,255,255,0.05);color:#6ee7b7;">✦ Design defensible, variance-based alarm thresholds</li>
+          <li style="padding:0.35rem 0;border-bottom:1px solid rgba(255,255,255,0.05);color:#6ee7b7;">✦ Interrogate AI confidence scores and false positive rates</li>
+          <li style="padding:0.35rem 0;color:#6ee7b7;">✦ Critically evaluate what GAS sampling is actually doing</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PARADIGM SHIFT
+════════════════════════════════════════ -->
+<div id="paradigm" class="section">
+
+  <div class="brand-mark">
+    <div class="bm-emblem">DB</div>
+    <div><div class="bm-name">Dyan Barry</div><div class="bm-text">CATALYST ✦</div></div>
+  </div>
+
+  <div class="section-title">🔄 The Paradigm Shift</div>
+  <div class="section-subtitle">When outputs are cheap, process becomes the competitive advantage</div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🤖</div>
+      <h2>The AI Output Problem in Education</h2>
+    </div>
+    <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:1rem;">Generative AI can now produce in seconds what once took hours: financial analyses, fraud risk assessments, data visualizations, audit alarm rules, ERP implementation plans. This fundamentally changes what education must deliver.</p>
+    <div class="highlight">
+      ✦ <strong>Key Insight:</strong> If AI can generate the output, the educational value is no longer in producing the output — it's in understanding, evaluating, and governing the process that generates it. Statistics is the language of that process.
+    </div>
+    <button class="research-btn" onclick="toggleResearch(this)">📖 Research on AI & Education <span class="arrow">▼</span></button>
+    <div class="research-panel">
+      <div class="cite-title">CPA Journal — Future of Business Data Analytics & Accounting Automation (2024)</div>
+      <div class="cite-body">Penn State professors describe how students who understand the statistical foundations of analytics tools "end the course feeling confident and become more comfortable with technology" — the prerequisite is foundational statistical literacy, not tool familiarity.</div>
+      <a href="https://www.cpajournal.com/2024/01/31/the-future-of-business-data-analytics-and-accounting-automation/" target="_blank">🔗 View Source</a>
+      <span class="cite-tag">AI Literacy</span><span class="cite-tag">Accounting Education</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">📊</div>
+      <h2>Old Model vs. New Model</h2>
+    </div>
+    <table class="paradigm-table">
+      <thead>
+        <tr>
+          <th>❌ Old Educational Model</th>
+          <th class="arrow-col"></th>
+          <th>✦ New Model — Enabled by Stats Prereq</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Can you <em>produce</em> the output?</td><td class="arrow-col">→</td><td>Can you <em>evaluate</em> the output?</td></tr>
+        <tr><td>Can you run the Altman Z-Score?</td><td class="arrow-col">→</td><td>Can you <em>validate</em> the Z-Score model's assumptions?</td></tr>
+        <tr><td>Can you build a visualization?</td><td class="arrow-col">→</td><td>Can you <em>critique</em> whether it's statistically honest?</td></tr>
+        <tr><td>Can you implement GAS alarm rules?</td><td class="arrow-col">→</td><td>Can you <em>design</em> the threshold logic behind them?</td></tr>
+        <tr><td>Can you use AI tools?</td><td class="arrow-col">→</td><td>Can you <em>audit</em> what the AI actually did?</td></tr>
+        <tr><td>Can you read a fraud detection report?</td><td class="arrow-col">→</td><td>Can you <em>assess</em> the false positive rate and sampling confidence?</td></tr>
+        <tr><td>Can you follow a BPMN process?</td><td class="arrow-col">→</td><td>Can you <em>quantify</em> the probability and risk at each gateway?</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🎓</div>
+      <h2>Bloom's Taxonomy — Levels Unlocked by Stats Prerequisite</h2>
+    </div>
+    <div class="grid-2">
+      <div>
+        <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:0.75rem;">When students enter with different quantitative backgrounds, ACCT 404 reasonably has to spend more time at <strong style="color:var(--sand-light);">Remember</strong> and <strong style="color:var(--sand-light);">Apply</strong> — formulas, definitions, and tool operation.</p>
+        <p style="font-size:0.85rem;color:var(--text-muted);">With MGSC 291 sequenced first, ACCT 404 can more fully target <strong style="color:var(--gold-light);">Analyze, Evaluate, and Create</strong> — the higher-order thinking already embedded in its best assignments.</p>
+        <button class="research-btn" onclick="toggleResearch(this)">📖 Bloom's & Analytics Research <span class="arrow">▼</span></button>
+        <div class="research-panel">
+          <div class="cite-title">Michigan Tech — Data Analytics in Accounting</div>
+          <div class="cite-body">"A new College of Business core undergraduate required course — Data Analytics — introduces students to the concepts needed to turn data into actionable insight. Students build skills in statistics, machine learning, and programming languages." Statistics is positioned as the entry point to all downstream analytics capability.</div>
+          <a href="https://www.mtu.edu/business/undergraduate/accounting/how-data-analytics/" target="_blank">🔗 View Source</a>
+          <span class="cite-tag">Curriculum Sequencing</span><span class="cite-tag">Analytics Pipeline</span>
+        </div>
+      </div>
+      <div>
+        <div class="progress-item">
+          <div class="progress-label"><span>🔴 Create — Design audit systems</span><span style="color:var(--gold);">Stats Required</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:95%;background:linear-gradient(90deg,#10b981,#c9a84c);"></div></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-label"><span>🟠 Evaluate — Validate AI outputs</span><span style="color:var(--gold);">Stats Required</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:90%;background:linear-gradient(90deg,#4a8a9a,#c9a84c);"></div></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-label"><span>🟡 Analyze — Interpret distributions</span><span style="color:var(--gold);">Stats Required</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:82%;background:linear-gradient(90deg,#e8832a,#c9a84c);"></div></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-label"><span>🟢 Apply — Run tools</span><span style="color:var(--text-muted);">Accessible Now</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:55%;background:rgba(255,255,255,0.25);"></div></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-label"><span>🔵 Remember — Recall formulas</span><span style="color:var(--text-muted);">Accessible Now</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:35%;background:rgba(255,255,255,0.2);"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     TOPIC MAPPING
+════════════════════════════════════════ -->
+<div id="mapping" class="section">
+
+  <div class="brand-mark">
+    <div class="bm-emblem">DB</div>
+    <div><div class="bm-name">Dyan Barry</div><div class="bm-text">CATALYST ✦</div></div>
+  </div>
+
+  <div class="section-title">🗺️ ACCT 404 Topic Mapping</div>
+  <div class="section-subtitle">How MGSC 291 directly enhances specific topics from the ACCT 404 course schedule</div>
+
+  <div class="grid-2">
+
+    <!-- Z-SCORE -->
+    <div class="topic-card">
+      <div class="topic-card-header" style="background:linear-gradient(135deg,rgba(30,61,69,0.9),rgba(74,138,154,0.4));">
+        📉 Lab 3 — Altman Z-Score
+      </div>
+      <div class="topic-card-body">
+        <div class="label-sm">Current Constraint</div>
+        <div class="without">Students treat Z = 1.2(X1) + 1.4(X2) + 3.3(X3) + 0.6(X4) + 1.0(X5) as a formula to memorize — plugging in numbers without understanding why the weights exist or what the Distress/Gray/Safe zones actually represent statistically.</div>
+        <div class="label-sm">With MGSC 291 First</div>
+        <div class="with">Students understand this is a <strong>multivariate discriminant analysis model</strong> — they can interpret weighting logic, misclassification risk, Type I/II error, and prediction confidence intervals around the zone thresholds.</div>
+        <div class="stat-concept">📐 Weighted linear models · Classification thresholds · Type I/II error · Prediction accuracy</div>
+        <button class="research-btn" onclick="toggleResearch(this)">📖 Research <span class="arrow">▼</span></button>
+        <div class="research-panel">
+          <div class="cite-title">Baruch College — Data Analytics Knowledge Required of a CPA (Deniz & Applebaum)</div>
+          <div class="cite-body">"An understanding of descriptive statistics is necessary for the effective use of hypothesis testing, correlation, regression analysis, and other normative and cause-and-effect statistical techniques." The Z-Score is a predictive model, so students with this foundation can move beyond calculation into interpretation, sensitivity, and model-risk discussion.</div>
+          <a href="https://zicklin.baruch.cuny.edu/wp-content/uploads/sites/10/2019/12/Deniz-Applebaum-Data-Analytics-Knowledge-Required-of-a-CPA.pdf" target="_blank">🔗 View Source (PDF)</a>
+          <span class="cite-tag">CPA Requirements</span><span class="cite-tag">Regression</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- DATA VISUALIZATIONS -->
+    <div class="topic-card">
+      <div class="topic-card-header" style="background:linear-gradient(135deg,rgba(6,95,70,0.5),rgba(16,185,129,0.2));">
+        📊 Chapter 3 — Data Visualizations
+      </div>
+      <div class="topic-card-body">
+        <div class="label-sm">Current Constraint</div>
+        <div class="without">Students choose chart types aesthetically. The course notes that "91% of people prefer visual content" and "the brain processes images 60,000x faster than text" — but without stats, students can't evaluate whether a visualization is statistically honest or misleading.</div>
+        <div class="label-sm">With MGSC 291 First</div>
+        <div class="with">Students select visualizations analytically — they know when scatter plots reveal correlation vs. noise, when distributions are skewed, when a line chart implies a trend that isn't statistically significant, and when the AMPS model (Master, Perform, Share) requires distributional awareness.</div>
+        <div class="stat-concept">📐 Distributions · Skewness · Correlation · Data types · Statistical honesty in visualization</div>
+        <button class="research-btn" onclick="toggleResearch(this)">📖 Research <span class="arrow">▼</span></button>
+        <div class="research-panel">
+          <div class="cite-title">Franklin University — Accounting & Data Analytics</div>
+          <div class="cite-body">"Companies need strong accounting leaders to translate data into valuable insights... Collecting and collating large amounts of data takes time, discipline and a certain set of skills." Statistical literacy strengthens those skills by helping students judge whether a visualization is communicating evidence or simply decorating numbers.</div>
+          <a href="https://www.franklin.edu/blog/accounting-mvp/accounting-data-analytics" target="_blank">🔗 View Source</a>
+          <span class="cite-tag">Data Visualization</span><span class="cite-tag">Analytics Literacy</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTINUOUS AUDITING -->
+    <div class="topic-card">
+      <div class="topic-card-header" style="background:linear-gradient(135deg,rgba(91,33,182,0.4),rgba(139,92,246,0.2));">
+        🔔 Continuous Auditing — Alarm Rules
+      </div>
+      <div class="topic-card-body">
+        <div class="label-sm">Current Constraint</div>
+        <div class="without">Students implement the alarm rule "flag if allowance for doubtful accounts differs significantly from last month" — but may define "significantly" by instinct or a fixed cutoff rather than by historical variation.</div>
+        <div class="label-sm">With MGSC 291 First</div>
+        <div class="with">Students design <strong>defensible, variance-based thresholds</strong> — using standard deviation, historical variance, and confidence intervals to distinguish signal from noise. The word "significantly" becomes a statistical term, not a vague qualifier.</div>
+        <div class="stat-concept">📐 Standard deviation · Variance · Confidence intervals · Signal vs. noise · Control charts</div>
+        <button class="research-btn" onclick="toggleResearch(this)">📖 Research <span class="arrow">▼</span></button>
+        <div class="research-panel">
+          <div class="cite-title">Baruch College — Statistical Knowledge Required for Audit Analytics</div>
+          <div class="cite-body">"Descriptive statistics utilizes numbers, tables, charts, and graphs to inform auditors about the raw scores presented in the data... When the objective of audit analytics is to generally describe and discuss a significant amount of a data set, descriptive statistics are highly recommended."</div>
+          <a href="https://zicklin.baruch.cuny.edu/wp-content/uploads/sites/10/2019/12/Deniz-Applebaum-Data-Analytics-Knowledge-Required-of-a-CPA.pdf" target="_blank">🔗 View Source (PDF)</a>
+          <span class="cite-tag">Continuous Auditing</span><span class="cite-tag">Threshold Design</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- FRAUD DETECTION -->
+    <div class="topic-card">
+      <div class="topic-card-header" style="background:linear-gradient(135deg,rgba(146,64,14,0.5),rgba(245,158,11,0.2));">
+        🕵️ Fraud Detection — GAS & Benford's Law
+      </div>
+      <div class="topic-card-body">
+        <div class="label-sm">Current Constraint</div>
+        <div class="without">Students use ACL/IDEA as black boxes — running queries without understanding the statistical logic of anomaly detection, what the sampling confidence means, or why Benford's Law works as a fraud indicator.</div>
+        <div class="label-sm">With MGSC 291 First</div>
+        <div class="with">Students understand that <strong>Benford's Law is a probability distribution</strong>, that fraud detection is anomaly detection (z-scores, outliers), and that GAS sampling has inferential statistical implications — they can evaluate what the tool is actually doing.</div>
+        <div class="stat-concept">📐 Probability distributions · Outlier detection · Z-scores · Sampling theory · Inferential statistics</div>
+        <button class="research-btn" onclick="toggleResearch(this)">📖 Research <span class="arrow">▼</span></button>
+        <div class="research-panel">
+          <div class="cite-title">Michigan Tech — Data Analytics in Accounting</div>
+          <div class="cite-body">"Detect Fraud: Data analytics help banks and auditors track and correct abnormal transactions and other red flags." The statistical foundation — understanding what constitutes a statistically abnormal transaction — is prerequisite knowledge for meaningful fraud analytics work.</div>
+          <a href="https://www.mtu.edu/business/undergraduate/accounting/how-data-analytics/" target="_blank">🔗 View Source</a>
+          <span class="cite-tag">Fraud Detection</span><span class="cite-tag">Anomaly Detection</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- AGED RECEIVABLES -->
+    <div class="topic-card">
+      <div class="topic-card-header" style="background:linear-gradient(135deg,rgba(30,61,69,0.9),rgba(74,138,154,0.3));">
+        📦 Lab 1 — Aged Receivables Distribution
+      </div>
+      <div class="topic-card-body">
+        <div class="label-sm">Current Constraint</div>
+        <div class="without">Students read aged receivables buckets as raw numbers — unable to contextualize whether the 61-90 day bucket is anomalous relative to historical patterns or the overall distribution.</div>
+        <div class="label-sm">With MGSC 291 First</div>
+        <div class="with">Students interpret the distribution analytically — understanding central tendency, dispersion, and whether the current period's distribution represents a statistically meaningful shift that warrants management attention.</div>
+        <div class="stat-concept">📐 Frequency distributions · Central tendency · Dispersion · Comparative period analysis</div>
+        <button class="research-btn" onclick="toggleResearch(this)">📖 Research <span class="arrow">▼</span></button>
+        <div class="research-panel">
+          <div class="cite-title">Accounting.com — Statistics in Accounting</div>
+          <div class="cite-body">"Statistics and accounting both focus on collecting, classifying, presenting, and summarizing quantitative data." Aged receivables analysis is a direct application of descriptive statistics — frequency distributions, central tendency, and dispersion are the analytical tools required.</div>
+          <a href="https://www.accounting.com/resources/how-accountants-use-statistics/" target="_blank">🔗 View Source</a>
+          <span class="cite-tag">Descriptive Statistics</span><span class="cite-tag">Receivables Analysis</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOCKCHAIN & IOT -->
+    <div class="topic-card">
+      <div class="topic-card-header" style="background:linear-gradient(135deg,rgba(6,78,59,0.5),rgba(52,211,153,0.15));">
+        🔗 Blockchain & IoT Data Integrity
+      </div>
+      <div class="topic-card-body">
+        <div class="label-sm">Current Constraint</div>
+        <div class="without">Students understand blockchain conceptually (supply chain, loyalty programs, auto industry) but may not yet have the statistical tools to evaluate the reliability of the data being recorded — especially from IoT sensors feeding temperature-sensitive goods tracking or auto delivery processes.</div>
+        <div class="label-sm">With MGSC 291 First</div>
+        <div class="with">Students can assess <strong>data quality and sensor reliability statistically</strong> — understanding that if IoT sensor data has measurement error or sampling bias, the financial data built on it is compromised. Blockchain records immutably; statistics determines whether what's recorded is trustworthy.</div>
+        <div class="stat-concept">📐 Measurement error · Data quality assessment · Reliability · Sampling bias · Garbage-in-garbage-out quantified</div>
+        <button class="research-btn" onclick="toggleResearch(this)">📖 Research <span class="arrow">▼</span></button>
+        <div class="research-panel">
+          <div class="cite-title">ACCT 404 Course Materials — Blockchain Use Cases</div>
+          <div class="cite-body">Course materials identify blockchain challenges including "speed, confidentiality, and governance requirements" and integration with enterprise solutions. Statistical literacy enables students to evaluate a deeper challenge: the quality of data entering the chain — particularly from IoT sensors in supply chain applications like temperature-sensitive goods transport.</div>
+          <span class="cite-tag">Blockchain</span><span class="cite-tag">IoT</span><span class="cite-tag">Data Quality</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- BPMN -->
+    <div class="topic-card">
+      <div class="topic-card-header" style="background:linear-gradient(135deg,rgba(76,29,149,0.4),rgba(167,139,250,0.15));">
+        🗺️ BPMN Process Modeling
+      </div>
+      <div class="topic-card-body">
+        <div class="label-sm">Current Constraint</div>
+        <div class="without">Students model BPMN gateway decision points (diamonds) as binary — yes/no — without quantifying the probability or risk associated with each branch path. Gateways are structural, not analytical.</div>
+        <div class="label-sm">With MGSC 291 First</div>
+        <div class="with">Students can assign <strong>probabilistic weights to gateway branches</strong>, enabling risk-informed process design. The sequence flows (arrows) carry not just direction but expected probability — enabling more sophisticated internal control evaluation.</div>
+        <div class="stat-concept">📐 Probability · Conditional probability · Expected value · Risk quantification at decision nodes</div>
+        <button class="research-btn" onclick="toggleResearch(this)">📖 Research <span class="arrow">▼</span></button>
+        <div class="research-panel">
+          <div class="cite-title">ACCT 404 Course Materials — BPMN Essentials</div>
+          <div class="cite-body">BPMN building blocks include Events (start, intermediate, end), Activities (rounded rectangles with verb phrases), Gateways (diamonds for decisions), and Sequence Flows (arrows). Statistical literacy transforms gateway analysis from structural to probabilistic — enabling risk-weighted process evaluation aligned with COSO ERM frameworks also covered in the course.</div>
+          <span class="cite-tag">BPMN</span><span class="cite-tag">Process Risk</span><span class="cite-tag">COSO ERM</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI & COGNITIVE TECH -->
+    <div class="topic-card">
+      <div class="topic-card-header" style="background:linear-gradient(135deg,rgba(30,61,69,0.9),rgba(99,102,241,0.25));">
+        🤖 AI & Cognitive Technologies
+      </div>
+      <div class="topic-card-body">
+        <div class="label-sm">Current Constraint</div>
+        <div class="without">Students see the Data → Learn → Predict cycle as a black box. They can describe AI conceptually, but statistical preparation helps them interrogate outputs, assess reliability, and evaluate whether a model's predictions should be trusted in an audit context.</div>
+        <div class="label-sm">With MGSC 291 First</div>
+        <div class="with">Students understand that "Learn" = parameter estimation and "Predict" = probability output. They can ask: <em>What was the training data distribution? What is the false positive rate? Is this model overfit? What does this confidence score actually mean?</em></div>
+        <div class="stat-concept">📐 Regression · Probability · Hypothesis testing · Overfitting · Confidence scores · Model validation</div>
+        <button class="research-btn" onclick="toggleResearch(this)">📖 Research <span class="arrow">▼</span></button>
+        <div class="research-panel">
+          <div class="cite-title">ScienceDirect — Accounting as STEM (2025)</div>
+          <div class="cite-body">"A solid understanding of mathematical and statistical concepts is considered crucial for interpreting and analyzing accounting information... [enabling] accounting professionals to meet the challenges of the digital age and technological advances." AI governance is the defining challenge of the digital age for accountants.</div>
+          <a href="https://www.sciencedirect.com/science/article/abs/pii/S0748575125000211" target="_blank">🔗 View Source</a>
+          <span class="cite-tag">AI Governance</span><span class="cite-tag">Model Validation</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="card" style="margin-top:1.5rem;border-color:rgba(232,131,42,0.35);background:rgba(232,131,42,0.06);">
+    <div class="card-header">
+      <div class="card-icon">⚖️</div>
+      <h2>Credibility Note: Not Every Topic Needs Deep Statistics</h2>
+    </div>
+    <p style="font-size:0.86rem;color:var(--text-muted);line-height:1.7;">This proposal is not claiming that every ACCT 404 topic becomes a statistics assignment. Some AIS topics remain primarily conceptual, technical, or process-oriented. The strongest case is narrower and more defensible: the course's most important emerging areas — continuous auditing, fraud detection, AI output review, data visualization, risk scoring, and analytics-driven controls — become substantially stronger when students already understand foundational statistics.</p>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════════
+     ASSIGNMENT ELEVATION
+════════════════════════════════════════ -->
+<div id="examples" class="section">
+
+  <div class="brand-mark">
+    <div class="bm-emblem">DB</div>
+    <div><div class="bm-name">Dyan Barry</div><div class="bm-text">CATALYST ✦</div></div>
+  </div>
+
+  <div class="section-title">🧪 Assignment Elevation: Same Assignment, Higher Rigor</div>
+  <div class="section-subtitle">Concrete examples of how MGSC 291 would strengthen specific ACCT 404 labs and activities</div>
+
+  <div class="thesis-box">
+    <p>"Statistics turns ACCT 404 assignments from <em>what did the tool output?</em> into <em>how confident are we in this decision, and can we defend the process that produced it?</em>"</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="topic-card">
+      <div class="topic-card-header">🔔 Continuous Auditing Alarm Rule</div>
+      <div class="topic-card-body">
+        <div class="label-sm">Current Surface-Level Version</div>
+        <div class="without">Flag allowance for doubtful accounts if it "differs significantly" from last month, often using a fixed rule such as 10% without explaining why that threshold is appropriate.</div>
+        <div class="label-sm">Elevated With MGSC 291</div>
+        <div class="with">Use prior-period data to calculate the mean change and standard deviation, then flag accounts exceeding a defensible threshold such as two standard deviations from the historical pattern.</div>
+        <div class="stat-concept">Assignment upgrade: arbitrary cutoff → evidence-based audit threshold</div>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <div class="topic-card-header">📉 Altman Z-Score Lab</div>
+      <div class="topic-card-body">
+        <div class="label-sm">Current Surface-Level Version</div>
+        <div class="without">Calculate the Z-score, place the firm into Distress, Gray, or Safe, and treat the final category as the answer.</div>
+        <div class="label-sm">Elevated With MGSC 291</div>
+        <div class="with">Discuss the score as a predictive model with uncertainty: how close is the firm to a cutoff, which input drives the classification, and how could small input changes alter the conclusion?</div>
+        <div class="stat-concept">Assignment upgrade: formula completion → model interpretation and sensitivity analysis</div>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <div class="topic-card-header">📊 Data Visualization / Dashboard Activity</div>
+      <div class="topic-card-body">
+        <div class="label-sm">Current Surface-Level Version</div>
+        <div class="without">Create charts that are visually clear and attractive, but may not fully justify why a chart type fits the data.</div>
+        <div class="label-sm">Elevated With MGSC 291</div>
+        <div class="with">Require a short "visual integrity note": identify the data type, distribution shape, outliers, scale choices, and whether the visualization supports a valid inference.</div>
+        <div class="stat-concept">Assignment upgrade: presentation → statistically honest communication</div>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <div class="topic-card-header">🕵️ Fraud Detection / GAS Query</div>
+      <div class="topic-card-body">
+        <div class="label-sm">Current Surface-Level Version</div>
+        <div class="without">Run a query to identify unusual transactions, duplicate payments, large values, or exceptions, then list what the software flagged.</div>
+        <div class="label-sm">Elevated With MGSC 291</div>
+        <div class="with">Define what "unusual" means before running the query: outliers, z-scores, expected distributions, false positives, and why a flag deserves follow-up instead of automatic suspicion.</div>
+        <div class="stat-concept">Assignment upgrade: software output → audit reasoning behind the exception</div>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <div class="topic-card-header">📦 Aged Receivables Analysis</div>
+      <div class="topic-card-body">
+        <div class="label-sm">Current Surface-Level Version</div>
+        <div class="without">Read the aging buckets and describe whether 31–60, 61–90, or 90+ day receivables increased or decreased.</div>
+        <div class="label-sm">Elevated With MGSC 291</div>
+        <div class="with">Compare the current aging distribution against historical patterns to determine whether the shift is normal fluctuation or a statistically meaningful risk signal.</div>
+        <div class="stat-concept">Assignment upgrade: bucket reading → distribution-based risk assessment</div>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <div class="topic-card-header">🤖 AI-Generated Audit Output</div>
+      <div class="topic-card-body">
+        <div class="label-sm">Current Surface-Level Version</div>
+        <div class="without">Use or critique an AI-generated risk score, fraud summary, or dashboard recommendation based mainly on whether it seems reasonable.</div>
+        <div class="label-sm">Elevated With MGSC 291</div>
+        <div class="with">Ask audit-facing questions: What does the confidence score mean? What is the false positive risk? What data trained the model? Is the output probability, classification, or explanation?</div>
+        <div class="stat-concept">Assignment upgrade: AI user → AI output auditor</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:1.5rem;">
+    <div class="card-header">
+      <div class="card-icon">🧾</div>
+      <h2>Mini Before/After Example</h2>
+    </div>
+    <div class="grid-2">
+      <div class="without" style="margin-bottom:0;">
+        <strong>Student A:</strong> "I flagged accounts where the balance changed by more than 10%."
+      </div>
+      <div class="with" style="margin-bottom:0;">
+        <strong>Student B:</strong> "Using three years of monthly history, I flagged accounts more than two standard deviations above normal variation, then reviewed whether the exception reflected collection risk, data entry error, or a legitimate business change."
+      </div>
+    </div>
+    <div class="highlight">✦ The difference is not harder math for its own sake. The difference is professional defensibility.</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     AI PIPELINE
+════════════════════════════════════════ -->
+<div id="ai" class="section">
+
+  <div class="brand-mark">
+    <div class="bm-emblem">DB</div>
+    <div><div class="bm-name">Dyan Barry</div><div class="bm-text">CATALYST ✦</div></div>
+  </div>
+
+  <div class="section-title">🤖 Statistics → AI → Audit Verification</div>
+  <div class="section-subtitle">Why statistical literacy strengthens AI governance in accounting</div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🧠</div>
+      <h2>Statistics as the Evaluation Language of AI</h2>
+    </div>
+    <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:1.2rem;">AI and machine learning systems used in accounting — fraud detection, predictive analytics, continuous auditing, and anomaly detection — rely on statistical foundations. Understanding statistics is not just adjacent to understanding AI. <strong style="color:var(--gold-light);">It is a foundation for evaluating AI responsibly.</strong></p>
+
+    <div class="highlight" style="background:rgba(201,168,76,0.10);border-color:rgba(201,168,76,0.35);color:var(--gold-light);">
+      ✦ <strong>Audit responsibility anchor:</strong> In practice, auditors and accountants are not being asked to become software engineers. They are being asked to judge whether technology-generated evidence is reliable enough to support a business or audit decision. That judgment depends on concepts like sampling, error rates, probability, bias, and confidence.
+    </div>
+
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="step-icon">📐</div>
+        <div class="step-title">MGSC 291</div>
+        <div class="step-desc">Probability · Regression · Distributions · Hypothesis Testing · Sampling</div>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-step">
+        <div class="step-icon">🤖</div>
+        <div class="step-title">AI / ML Systems</div>
+        <div class="step-desc">Training · Parameter Estimation · Prediction · Classification</div>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-step">
+        <div class="step-icon">📊</div>
+        <div class="step-title">Accounting Outputs</div>
+        <div class="step-desc">Fraud Alerts · Risk Scores · Forecasts · Anomaly Flags</div>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-step" style="border-color:rgba(201,168,76,0.5);background:rgba(201,168,76,0.08);">
+        <div class="step-icon">🔍</div>
+        <div class="step-title" style="color:var(--gold);">Audit Verification</div>
+        <div class="step-desc">Validate · Interrogate · Govern · Assure</div>
+      </div>
+    </div>
+
+    <div class="highlight">
+      ✦ <strong>The Critical Point:</strong> Students can still use AI tools without statistics, but statistics helps them move from receiving outputs to evaluating the pipeline behind those outputs — from training data to risk score to audit conclusion.
+    </div>
+
+    <button class="research-btn" onclick="toggleResearch(this)">📖 Research on AI Verification <span class="arrow">▼</span></button>
+    <div class="research-panel">
+      <div class="cite-title">Lamar University — The Future of Data Analysis for Accounting</div>
+      <div class="cite-body">"It's also extremely helpful to understand languages like Python and R to create custom algorithms and data models... As the amount of available information increases so does the need to have skilled accountants who can analyze and contextualize it." Statistical literacy is the foundation that makes AI output contextualization possible.</div>
+      <a href="https://degree.lamar.edu/online-programs/undergraduate/bs-management-accounting-analytics/the-future-of-data/" target="_blank">🔗 View Source</a>
+      <span class="cite-tag">AI Verification</span><span class="cite-tag">Accounting Analytics</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🔗</div>
+      <h2>How Statistics Supports AI Concepts in ACCT 404</h2>
+    </div>
+    <div style="overflow-x:auto;">
+      <table style="width:100%;border-collapse:collapse;font-size:0.83rem;">
+        <thead>
+          <tr style="background:rgba(201,168,76,0.12);color:var(--gold-light);">
+            <th style="padding:0.7rem;text-align:left;border-radius:8px 0 0 0;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.06em;">Statistics Concept</th>
+            <th style="padding:0.7rem;text-align:left;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.06em;">How It Powers AI</th>
+            <th style="padding:0.7rem;text-align:left;border-radius:0 8px 0 0;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.06em;">ACCT 404 Application</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+            <td style="padding:0.65rem;font-weight:600;color:var(--sand-light);">Probability Distributions</td>
+            <td style="padding:0.65rem;color:var(--text-muted);">Bayesian inference, classification models</td>
+            <td style="padding:0.65rem;"><span class="tag tag-teal">Fraud Detection</span><span class="tag tag-gold">Benford's Law</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid rgba(255,255,255,0.05);background:rgba(255,255,255,0.02);">
+            <td style="padding:0.65rem;font-weight:600;color:var(--sand-light);">Regression Analysis</td>
+            <td style="padding:0.65rem;color:var(--text-muted);">Core of supervised machine learning</td>
+            <td style="padding:0.65rem;"><span class="tag tag-gold">Altman Z-Score</span><span class="tag tag-teal">Predictive Analytics</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+            <td style="padding:0.65rem;font-weight:600;color:var(--sand-light);">Hypothesis Testing</td>
+            <td style="padding:0.65rem;color:var(--text-muted);">Model validation, significance testing</td>
+            <td style="padding:0.65rem;"><span class="tag tag-spark">Continuous Auditing</span><span class="tag tag-teal">Alarm Rules</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid rgba(255,255,255,0.05);background:rgba(255,255,255,0.02);">
+            <td style="padding:0.65rem;font-weight:600;color:var(--sand-light);">Descriptive Statistics</td>
+            <td style="padding:0.65rem;color:var(--text-muted);">Training data quality assessment</td>
+            <td style="padding:0.65rem;"><span class="tag tag-teal">Data Visualization</span><span class="tag tag-gold">Aged Receivables</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+            <td style="padding:0.65rem;font-weight:600;color:var(--sand-light);">Correlation / Covariance</td>
+            <td style="padding:0.65rem;color:var(--text-muted);">Feature selection in ML models</td>
+            <td style="padding:0.65rem;"><span class="tag tag-spark">WorldCom E/R Ratio</span><span class="tag tag-teal">Trend Analysis</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid rgba(255,255,255,0.05);background:rgba(255,255,255,0.02);">
+            <td style="padding:0.65rem;font-weight:600;color:var(--sand-light);">Confidence Intervals</td>
+            <td style="padding:0.65rem;color:var(--text-muted);">Prediction uncertainty quantification</td>
+            <td style="padding:0.65rem;"><span class="tag tag-gold">AI Output Verification</span><span class="tag tag-teal">Risk Assessment</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+            <td style="padding:0.65rem;font-weight:600;color:var(--sand-light);">Sampling Theory</td>
+            <td style="padding:0.65rem;color:var(--text-muted);">Training data selection, generalizability</td>
+            <td style="padding:0.65rem;"><span class="tag tag-green">GAS / ACL / IDEA</span><span class="tag tag-teal">Audit Sampling</span></td>
+          </tr>
+          <tr style="background:rgba(255,255,255,0.02);">
+            <td style="padding:0.65rem;font-weight:600;color:var(--sand-light);">Normal Distribution</td>
+            <td style="padding:0.65rem;color:var(--text-muted);">Activation functions, weight initialization</td>
+            <td style="padding:0.65rem;"><span class="tag tag-spark">Neural Networks</span><span class="tag tag-teal">Anomaly Detection</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <button class="research-btn" onclick="toggleResearch(this)">📖 Research on Stats-AI Connection <span class="arrow">▼</span></button>
+    <div class="research-panel">
+      <div class="cite-title">Coursera — Accounting Data Analytics Specialization</div>
+      <div class="cite-body">"Run and interpret fundamental data analytic tasks in Python including descriptive statistics, data visualizations, and regression... skills in machine learning algorithms including classification, regression, clustering, text analysis, time series analysis." Every ML skill listed maps directly to a statistics concept — confirming that statistics is the prerequisite language for AI literacy.</div>
+      <a href="https://www.coursera.org/specializations/accounting-data-analytics" target="_blank">🔗 View Source</a>
+      <span class="cite-tag">Machine Learning</span><span class="cite-tag">Statistics Foundation</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🌐</div>
+      <h2>IoT, Blockchain & the Data Integrity Chain</h2>
+    </div>
+    <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:1rem;">ACCT 404 covers IoT-connected blockchain systems — temperature-sensitive supply chains (ice cream, milk), loyalty programs, auto industry delivery processes. Statistics reveals a critical hidden risk:</p>
+    <div class="grid-2">
+      <div style="background:rgba(239,68,68,0.08);border-radius:10px;padding:1.2rem;border:1px solid rgba(239,68,68,0.2);">
+        <div style="font-weight:700;color:#fca5a5;margin-bottom:0.5rem;">⚠️ The Hidden Risk</div>
+        <p style="font-size:0.83rem;color:var(--text-muted);">Blockchain records data immutably — but it cannot validate the <em>quality</em> of the data being recorded. If an IoT sensor measuring milk temperature has measurement error or sampling bias, that error is permanently recorded. The ledger is trustworthy; the data may not be.</p>
+      </div>
+      <div style="background:rgba(16,185,129,0.08);border-radius:10px;padding:1.2rem;border:1px solid rgba(16,185,129,0.2);">
+        <div style="font-weight:700;color:#6ee7b7;margin-bottom:0.5rem;">✦ What Stats Enables</div>
+        <p style="font-size:0.83rem;color:var(--text-muted);">Students with statistical literacy can assess sensor reliability, identify measurement error patterns, evaluate sampling frequency adequacy, and determine whether the data feeding the blockchain is statistically trustworthy — before it becomes immutable.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     RESEARCH
+════════════════════════════════════════ -->
+<div id="research" class="section">
+
+  <div class="brand-mark">
+    <div class="bm-emblem">DB</div>
+    <div><div class="bm-name">Dyan Barry</div><div class="bm-text">CATALYST ✦</div></div>
+  </div>
+
+  <div class="section-title">📚 Research & Academic Support</div>
+  <div class="section-subtitle">Peer-reviewed and institutional evidence supporting statistics as foundational to accounting analytics education</div>
+
+  <div class="card" style="border-color:rgba(232,131,42,0.35);background:rgba(232,131,42,0.06);">
+    <div class="card-header">
+      <div class="card-icon">🏛️</div>
+      <h2>External Validation: This Is Not Just a Local Preference</h2>
+    </div>
+    <p style="font-size:0.86rem;color:var(--text-muted);line-height:1.7;margin-bottom:0.8rem;">The prerequisite argument fits the broader direction of the accounting profession. The AICPA/NASBA CPA Evolution Model Curriculum was created to help accounting education respond to rapidly changing CPA competencies, and the redesigned CPA model includes a discipline area in Information Systems and Controls. That makes ACCT 404 exactly the kind of course where data analytics, digital acumen, and audit verification should be sequenced intentionally rather than treated as add-ons.</p>
+    <div class="grid-2">
+      <div style="background:rgba(74,138,154,0.12);border-radius:10px;padding:1rem;border-left:3px solid rgba(74,138,154,0.5);">
+        <div style="font-weight:700;color:var(--sand-light);margin-bottom:0.35rem;">Professional alignment</div>
+        <div style="font-size:0.82rem;color:var(--text-muted);">CPA Evolution connects accounting education to modern technology, analytics, audit, and information systems expectations.</div>
+      </div>
+      <div style="background:rgba(16,185,129,0.08);border-radius:10px;padding:1rem;border-left:3px solid rgba(16,185,129,0.5);">
+        <div style="font-weight:700;color:#6ee7b7;margin-bottom:0.35rem;">Course sequencing implication</div>
+        <div style="font-size:0.82rem;color:var(--text-muted);">If AIS is now a technology-and-controls course, then statistics belongs earlier in the sequence as a foundation for analytics-driven judgment.</div>
+      </div>
+    </div>
+    <button class="research-btn" onclick="toggleResearch(this)">📖 Professional Sources <span class="arrow">▼</span></button>
+    <div class="research-panel">
+      <div class="cite-title">AICPA/NASBA — CPA Evolution Model Curriculum</div>
+      <div class="cite-body">The model curriculum was developed to help educators adapt accounting education to changing CPA skills and competencies, including information systems, controls, analytics, and digital acumen.</div>
+      <a href="https://nasba.org/wp-content/uploads/2021/06/Model-curriculum_web_6.11.21.pdf" target="_blank">🔗 View Source</a>
+      <span class="cite-tag">CPA Evolution</span><span class="cite-tag">AIS</span><span class="cite-tag">Digital Acumen</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🔬</div>
+      <h2>Peer-Reviewed Research</h2>
+    </div>
+
+    <div class="citation">
+      <div class="cite-source">ScienceDirect — Accounting as a STEM Discipline (Systematic Review 2015–2024)</div>
+      <div class="cite-finding">"A solid understanding of mathematical and statistical concepts is considered crucial for interpreting and analyzing accounting information. The development of professional skills in AIS is key to characterizing accounting as a STEM discipline. These skills enable accounting professionals to meet the challenges of the digital age."</div>
+      <span class="tag tag-teal">STEM Accounting</span><span class="tag tag-gold">Statistical Literacy</span><span class="tag tag-spark">Curriculum Design</span>
+      <br><a href="https://www.sciencedirect.com/science/article/abs/pii/S0748575125000211" target="_blank" style="color:var(--teal-bright);font-size:0.75rem;">🔗 View Full Article</a>
+    </div>
+
+    <div class="citation">
+      <div class="cite-source">Baruch College / Zicklin — Data Analytics Knowledge Required of a CPA (Deniz & Applebaum)</div>
+      <div class="cite-finding">"Having a mastery of basic statistical concepts, principles and theories can help auditors understand, accurately interpret and present data, as well as more effectively use the various available software tools... An understanding of descriptive statistics is necessary for the effective use of hypothesis testing, correlation, regression analysis, and other normative and cause-and-effect statistical techniques."</div>
+      <span class="tag tag-teal">CPA Requirements</span><span class="tag tag-gold">Audit Analytics</span><span class="tag tag-green">Statistical Foundation</span>
+      <br><a href="https://zicklin.baruch.cuny.edu/wp-content/uploads/sites/10/2019/12/Deniz-Applebaum-Data-Analytics-Knowledge-Required-of-a-CPA.pdf" target="_blank" style="color:var(--teal-bright);font-size:0.75rem;">🔗 View Full PDF</a>
+    </div>
+
+    <div class="citation">
+      <div class="cite-source">CPA Journal — The Future of Business Data Analytics and Accounting Automation (2024)</div>
+      <div class="cite-finding">Penn State accounting professors describe a teaching approach where students learn advanced analytics tools (R, Python, SQL, Power BI). Students "end the course feeling confident and become more comfortable with technology." The sequencing lesson for this depth: foundational statistical and analytical literacy is strongest when established before the course begins.</div>
+      <span class="tag tag-spark">Analytics Education</span><span class="tag tag-teal">Tool Proficiency</span><span class="tag tag-gold">Learning Outcomes</span>
+      <br><a href="https://www.cpajournal.com/2024/01/31/the-future-of-business-data-analytics-and-accounting-automation/" target="_blank" style="color:var(--teal-bright);font-size:0.75rem;">🔗 View Full Article</a>
+    </div>
+
+    <div class="citation">
+      <div class="cite-source">Michigan Tech — Data Analytics in Accounting</div>
+      <div class="cite-finding">"A new College of Business core undergraduate required course — Data Analytics — introduces students to the concepts needed to turn data into actionable insight. In the class, students build skills in statistics, machine learning, and programming languages." Statistics is positioned as the entry point to all downstream analytics capability.</div>
+      <span class="tag tag-teal">Curriculum Sequencing</span><span class="tag tag-gold">Analytics Pipeline</span>
+      <br><a href="https://www.mtu.edu/business/undergraduate/accounting/how-data-analytics/" target="_blank" style="color:var(--teal-bright);font-size:0.75rem;">🔗 View Full Article</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🏛️</div>
+      <h2>Institutional Precedents</h2>
+    </div>
+    <div class="grid-2">
+      <div class="citation" style="margin-bottom:0;">
+        <div class="cite-source">Golden Gate University — MS Accounting Data & Analytics</div>
+        <div class="cite-finding">Explicitly requires statistical analysis through Python and R as core curriculum. Program is STEM-designated, reflecting the mathematical foundation required for accounting analytics work.</div>
+        <span class="tag tag-teal">STEM Designation</span>
+        <br><a href="https://ggu.edu/programs/ms-accounting-data-analytics/" target="_blank" style="color:var(--teal-bright);font-size:0.75rem;">🔗 View Program</a>
+      </div>
+      <div class="citation" style="margin-bottom:0;">
+        <div class="cite-source">ASU — Accountancy and Data Analytics (MACC)</div>
+        <div class="cite-finding">"Applicants must complete program prerequisites before admission." Statistics and analytics prerequisites are enforced at the graduate level — the same sequencing logic applies at the undergraduate course level.</div>
+        <span class="tag tag-gold">Prerequisite Enforcement</span>
+        <br><a href="https://degrees.apps.asu.edu/masters-phd/major/ASU00/BAACCMACC/accountancy-and-data-analytics-macc" target="_blank" style="color:var(--teal-bright);font-size:0.75rem;">🔗 View Program</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">📈</div>
+      <h2>Labor Market Evidence</h2>
+    </div>
+    <div class="grid-3">
+      <div class="stat-box">
+        <div class="number">35%</div>
+        <div class="label">Projected growth in data science jobs 2022–2032 (U.S. Bureau of Labor Statistics)</div>
+      </div>
+      <div class="stat-box">
+        <div class="number">$108K</div>
+        <div class="label">Median pay for data scientists — roles increasingly requiring accounting + statistical literacy</div>
+      </div>
+      <div class="stat-box">
+        <div class="number">2.5QT</div>
+        <div class="label">Bytes of data generated daily — accountants must be equipped to evaluate it statistically</div>
+      </div>
+    </div>
+    <button class="research-btn" onclick="toggleResearch(this)" style="margin-top:1rem;">📖 Labor Market Sources <span class="arrow">▼</span></button>
+    <div class="research-panel">
+      <div class="cite-title">Lamar University — Accounting and Data Analytics Degree</div>
+      <div class="cite-body">"According to the U.S. Bureau of Labor Statistics, the 2023 median pay for data scientists was $108,020 and $79,880 for accountants. The job market for data scientists is expanding rapidly, with the number of jobs expected to grow 35% from 2022 to 2032 — much faster than the average for all occupations." Accountants with statistical and analytics literacy bridge both fields.</div>
+      <a href="https://degree.lamar.edu/online-programs/undergraduate/bs-management-accounting-analytics/the-future-of-data/" target="_blank">🔗 View Source</a>
+      <span class="cite-tag">Labor Market</span><span class="cite-tag">BLS Data</span>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     SKILL BRIDGE
+════════════════════════════════════════ -->
+<div id="bridge" class="section">
+
+  <div class="brand-mark">
+    <div class="bm-emblem">DB</div>
+    <div><div class="bm-name">Dyan Barry</div><div class="bm-text">CATALYST ✦</div></div>
+  </div>
+
+  <div class="section-title">🔗 The Skill Bridge</div>
+  <div class="section-subtitle">Direct mapping from MGSC 291 concepts to ACCT 404 requirements</div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🌉</div>
+      <h2>MGSC 291 → ACCT 404 Direct Connections</h2>
+    </div>
+    <p style="font-size:0.83rem;color:var(--text-muted);margin-bottom:1.2rem;">Each row shows a statistics concept students learn in MGSC and the specific ACCT 404 skill it directly enables:</p>
+
+    <div class="bridge-row">
+      <div class="bridge-left">📐 Descriptive Statistics (mean, median, std dev, distributions)</div>
+      <div class="bridge-arrow">→</div>
+      <div class="bridge-right">📊 Interpreting aged receivables distributions & selecting correct visualization types in Ch. 3</div>
+    </div>
+    <div class="bridge-row">
+      <div class="bridge-left">📐 Regression Analysis (linear, multivariate)</div>
+      <div class="bridge-arrow">→</div>
+      <div class="bridge-right">📉 Understanding the Altman Z-Score as a weighted discriminant model, not just a formula (Lab 3)</div>
+    </div>
+    <div class="bridge-row">
+      <div class="bridge-left">📐 Hypothesis Testing (null hypothesis, p-values, significance)</div>
+      <div class="bridge-arrow">→</div>
+      <div class="bridge-right">🔔 Designing statistically defensible continuous audit alarm thresholds — defining "significantly"</div>
+    </div>
+    <div class="bridge-row">
+      <div class="bridge-left">📐 Probability Distributions (normal, Poisson, etc.)</div>
+      <div class="bridge-arrow">→</div>
+      <div class="bridge-right">🕵️ Understanding Benford's Law as a fraud detection distribution; anomaly scoring in GAS</div>
+    </div>
+    <div class="bridge-row">
+      <div class="bridge-left">📐 Sampling Theory (random, stratified, systematic)</div>
+      <div class="bridge-arrow">→</div>
+      <div class="bridge-right">🔍 Critically evaluating what GAS tools (ACL/IDEA) are actually doing statistically</div>
+    </div>
+    <div class="bridge-row">
+      <div class="bridge-left">📐 Confidence Intervals & Prediction Intervals</div>
+      <div class="bridge-arrow">→</div>
+      <div class="bridge-right">🤖 Verifying AI output confidence scores and quantifying prediction uncertainty</div>
+    </div>
+    <div class="bridge-row">
+      <div class="bridge-left">📐 Correlation & Covariance Analysis</div>
+      <div class="bridge-arrow">→</div>
+      <div class="bridge-right">📈 Detecting WorldCom-style E/R ratio manipulation through trend and ratio distribution analysis</div>
+    </div>
+    <div class="bridge-row">
+      <div class="bridge-left">📐 Measurement Error & Data Quality</div>
+      <div class="bridge-arrow">→</div>
+      <div class="bridge-right">🌐 Assessing IoT sensor reliability before data enters blockchain supply chain records</div>
+    </div>
+    <div class="bridge-row">
+      <div class="bridge-left">📐 Time Series Analysis</div>
+      <div class="bridge-arrow">→</div>
+      <div class="bridge-right">📊 Identifying model drift in AI systems and evaluating trend-based visualizations for decision-making</div>
+    </div>
+    <div class="bridge-row">
+      <div class="bridge-left">📐 Expected Value & Decision Theory</div>
+      <div class="bridge-arrow">→</div>
+      <div class="bridge-right">🗺️ Quantifying risk at BPMN gateway decision points for risk-informed process design</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🎯</div>
+      <h2>The "Already in the Degree" Advantage</h2>
+    </div>
+    <div class="highlight">
+      ✦ <strong>Key Curriculum Argument:</strong> MGSC 291 is already required in the business degree. This proposal does not add credit hours, cost, or burden to students. It simply sequences existing coursework so that ACCT 404 can be taught at the depth it deserves.
+    </div>
+    <div class="grid-2" style="margin-top:1rem;">
+      <div style="background:rgba(239,68,68,0.07);border-radius:10px;padding:1.2rem;border:1px solid rgba(239,68,68,0.2);">
+        <div style="font-weight:700;color:#fca5a5;margin-bottom:0.5rem;">Current State</div>
+        <ul style="list-style:none;font-size:0.83rem;color:var(--text-muted);">
+          <li style="padding:0.3rem 0;">• Students may take MGSC and ACCT 404 simultaneously or in any order</li>
+          <li style="padding:0.3rem 0;">• ACCT 404 must accommodate varied statistical preparation</li>
+          <li style="padding:0.3rem 0;">• Advanced topics remain surface-level due to knowledge gaps</li>
+          <li style="padding:0.3rem 0;">• Students have fewer tools for engaging critically with AI/analytics outputs</li>
+        </ul>
+      </div>
+      <div style="background:rgba(16,185,129,0.07);border-radius:10px;padding:1.2rem;border:1px solid rgba(16,185,129,0.2);">
+        <div style="font-weight:700;color:#6ee7b7;margin-bottom:0.5rem;">Proposed State</div>
+        <ul style="list-style:none;font-size:0.83rem;color:var(--text-muted);">
+          <li style="padding:0.3rem 0;">✦ MGSC 291 completed before ACCT 404 — same total credits</li>
+          <li style="padding:0.3rem 0;">✦ ACCT 404 can assume a shared foundation and go deeper</li>
+          <li style="padding:0.3rem 0;">✦ Labs require threshold design, model validation, AI auditing</li>
+          <li style="padding:0.3rem 0;">✦ Students graduate as AI-literate accounting professionals</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     RECOMMENDATION
+════════════════════════════════════════ -->
+<div id="recommendation" class="section">
+
+  <div class="brand-mark">
+    <div class="bm-emblem">DB</div>
+    <div><div class="bm-name">Dyan Barry</div><div class="bm-text">CATALYST ✦</div></div>
+  </div>
+
+  <div class="section-title">✦ Formal Recommendation</div>
+  <div class="section-subtitle">A structured proposal for the curriculum committee</div>
+
+  <div class="thesis-box">
+    <p>"MGSC 291 should be considered as a prerequisite or clearly recommended prior course for ACCT 404 — not as a criticism of the existing course, but because <em>sequencing it first unlocks more room</em> for analytical, AI-critical, and process-level thinking that the course already points toward."</p>
+  </div>
+
+  <div class="rec-box">
+    <h3>✦ Proposed Curriculum Change</h3>
+    <ul>
+      <li>Consider designating MGSC 291 (Business Statistics) as a formal prerequisite or strongly recommended prior course for ACCT 404 (Accounting Information Systems)</li>
+      <li>No additional credit hours required — MGSC is already part of the business degree curriculum</li>
+      <li>Update ACCT 404 course design to leverage statistical literacy: deeper threshold design, model validation exercises, and AI output auditing assignments</li>
+      <li>Align with national movement toward data analytics, digital acumen, and technology integration in accounting education</li>
+      <li>Position the Darla Moore School of Business at the forefront of accounting-as-STEM curriculum innovation</li>
+      <li>Reflect the evolving CPA exam's increased emphasis on data analytics and technology competencies</li>
+    </ul>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">🎓</div>
+        <h2>Benefits to Students</h2>
+      </div>
+      <ul style="list-style:none;font-size:0.83rem;color:var(--text-muted);">
+        <li style="padding:0.4rem 0;border-bottom:1px solid rgba(255,255,255,0.05);">✦ Deeper engagement with the analytics-heavy topics in ACCT 404</li>
+        <li style="padding:0.4rem 0;border-bottom:1px solid rgba(255,255,255,0.05);">✦ Ability to critically evaluate and audit AI outputs — a career-defining skill</li>
+        <li style="padding:0.4rem 0;border-bottom:1px solid rgba(255,255,255,0.05);">✦ Stronger data visualization and analytics competency</li>
+        <li style="padding:0.4rem 0;border-bottom:1px solid rgba(255,255,255,0.05);">✦ Genuine understanding of fraud detection logic, not just tool operation</li>
+        <li style="padding:0.4rem 0;">✦ Competitive advantage in a job market demanding data-literate accountants</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">🏛️</div>
+        <h2>Benefits to the Program</h2>
+      </div>
+      <ul style="list-style:none;font-size:0.83rem;color:var(--text-muted);">
+        <li style="padding:0.4rem 0;border-bottom:1px solid rgba(255,255,255,0.05);">✦ ACCT 404 can spend more time on higher-level application, rigor, and depth</li>
+        <li style="padding:0.4rem 0;border-bottom:1px solid rgba(255,255,255,0.05);">✦ Aligns with the profession-wide shift toward data analytics, digital acumen, and information systems competence</li>
+        <li style="padding:0.4rem 0;border-bottom:1px solid rgba(255,255,255,0.05);">✦ Positions Moore School as a leader in AI-literate accounting graduates</li>
+        <li style="padding:0.4rem 0;border-bottom:1px solid rgba(255,255,255,0.05);">✦ Supports publishable curriculum innovation research</li>
+        <li style="padding:0.4rem 0;">✦ Strengthens employer relationships through more analytically capable graduates</li>
+      </ul>
+    </div>
+  </div>
+
+
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🛠️</div>
+      <h2>Implementation Feasibility</h2>
+    </div>
+    <div class="grid-2">
+      <div style="background:rgba(74,138,154,0.12);border-radius:10px;padding:1rem;border-left:3px solid rgba(74,138,154,0.5);">
+        <div style="font-weight:700;color:var(--sand-light);margin-bottom:0.4rem;">Low-Burden Change</div>
+        <div style="font-size:0.83rem;color:var(--text-muted);">MGSC 291 is already part of the business curriculum, so the proposal changes sequence rather than adding credits. The cleanest implementation is advising students to complete MGSC before enrolling in ACCT 404.</div>
+      </div>
+      <div style="background:rgba(16,185,129,0.08);border-radius:10px;padding:1rem;border-left:3px solid rgba(16,185,129,0.5);">
+        <div style="font-weight:700;color:#6ee7b7;margin-bottom:0.4rem;">Course Design Payoff</div>
+        <div style="font-size:0.83rem;color:var(--text-muted);">Once students share the foundation, ACCT 404 can spend less time re-explaining basic statistical ideas and more time applying them to AIS controls, analytics, audit judgment, and AI governance.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">⚡</div>
+      <h2>Anticipated Objections & Responses</h2>
+    </div>
+    <div class="objection">
+      <div class="obj-q">❓ "It adds a barrier to enrollment in ACCT 404."</div>
+      <div class="obj-a">✦ MGSC is already required in the degree. Students are already taking it. The proposal simply ensures they take it <em>first</em> — the same total workload, better sequenced for maximum learning impact.</div>
+    </div>
+    <div class="objection">
+      <div class="obj-q">❓ "ACCT 404 doesn't require advanced statistics."</div>
+      <div class="obj-a">✦ It doesn't require advanced statistics — it requires <em>foundational</em> statistical literacy. The Altman Z-Score, continuous auditing alarm design, fraud detection, data visualization selection, and AI output verification all require basic statistical concepts that MGSC provides.</div>
+    </div>
+    <div class="objection">
+      <div class="obj-q">❓ "Students can learn what they need within ACCT 404."</div>
+      <div class="obj-a">✦ Teaching statistics within ACCT 404 would require class time to be spent rebuilding prerequisite concepts, which can limit the time available for deeper AIS application. The prerequisite model allows ACCT 404 to assume the foundation and build on it — a common approach in technical curriculum sequencing.</div>
+    </div>
+    <div class="objection">
+      <div class="obj-q">❓ "This is a curriculum change that requires significant process."</div>
+      <div class="obj-a">✦ The research, the labor market data, professional curriculum models, and the course content itself all point to the same conclusion. The question is not whether every ACCT 404 topic requires statistics. The narrower question is whether the analytics-heavy parts of the course are stronger when students arrive with the statistical foundation already in place.</div>
+    </div>
+  </div>
+
+  <div class="card" style="text-align:center;background:linear-gradient(135deg,rgba(15,34,40,0.95),rgba(45,85,96,0.7));border:2px solid var(--gold);">
+    <div style="font-size:2.5rem;margin-bottom:0.5rem;">✦</div>
+    <h2 style="color:var(--gold);margin-bottom:0.75rem;font-size:1.2rem;">The Bottom Line</h2>
+    <p style="font-size:0.95rem;color:var(--text-light);font-weight:600;max-width:750px;margin:0 auto;line-height:1.8;font-style:italic;">
+      "When outputs are cheap, process is the competitive advantage. MGSC 291 gives students the language of process — and ACCT 404 is where they learn to apply it to the most consequential processes in business: financial systems, audit, fraud detection, and AI governance. Sequence them correctly, and both courses become exponentially more valuable."
+    </p>
+    <div class="divider" style="max-width:300px;margin:1.5rem auto;"></div>
+    <div style="display:flex;align-items:center;justify-content:center;gap:0.75rem;">
+      <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--teal-mid),var(--teal-dark));border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:800;color:var(--gold);font-style:italic;position:relative;">DB<span style="position:absolute;top:-4px;right:-3px;font-size:0.4rem;color:var(--gold);">✦</span></div>
+      <div style="text-align:left;">
+        <div style="font-size:0.75rem;color:var(--gold-light);font-weight:700;letter-spacing:0.08em;">DYAN BARRY · CATALYST</div>
+        <div style="font-size:0.68rem;color:var(--text-muted);">ACCT 404 Foundation Proposal · Spring 2026</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <div class="footer-brand">
+    <div class="footer-emblem">DB</div>
+    <div class="footer-text">
+      <strong>Dyan Barry · CATALYST</strong><br>
+      ACCT 404 Foundation Proposal · Darla Moore School of Business
+    </div>
+  </div>
+  <div class="footer-right">
+    University of South Carolina · Spring 2026<br>
+    MGSC 291 → ACCT 404 Foundation Proposal
+  </div>
+</footer>
+
+<script>
+  function showSection(id, btn) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    if (btn) btn.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function toggleResearch(btn) {
+    const panel = btn.nextElementSibling;
+    const isOpen = panel.classList.contains('open');
+    // Close all panels in this card first
+    btn.closest('.card, .topic-card-body').querySelectorAll('.research-panel').forEach(p => p.classList.remove('open'));
+    btn.closest('.card, .topic-card-body').querySelectorAll('.research-btn').forEach(b => b.classList.remove('open'));
+    if (!isOpen) {
+      panel.classList.add('open');
+      btn.classList.add('open');
+    }
+  }
+</script>
+</body>
+</html>
